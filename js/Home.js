@@ -1,48 +1,14 @@
+//Clases de objetos a guardar
 import { Juego } from "./classes/Juego.js";
 import { Usuario } from "./classes/Usuario.js";
-
+ //Funcion que crea los elementos HTML
+import { createElementWithText } from "./common/createElementWithText.js";
+import { createInput } from "./common/createInput.js";
+import { createButton } from "./common/createButton.js";
 export const Home = () => {
-  //Funcion que crea los elementos HTML
+ 
 
-  function createElementWithText(etiqueta, texto, classNamed) {
-    let elemento = document.createElement(etiqueta);
-    elemento.textContent = texto;
-    elemento.setAttribute("class", classNamed);
 
-    return elemento;
-  }
-
-  function createInput(id, name, type, placeholder, list) {
-    let containerInput = document.createElement("div");
-    containerInput.setAttribute("class", "input-container");
-
-    let inputTemporal = document.createElement("input");
-
-    for (let i = 0; i < arguments.length; i++) {
-      if (i == 0) {
-        inputTemporal.setAttribute("id", arguments[i]);
-      } else if (i == 1) {
-        inputTemporal.setAttribute("name", arguments[i]);
-      } else if (i == 2) {
-        inputTemporal.setAttribute("type", arguments[i]);
-      } else if (i == 3) {
-        inputTemporal.setAttribute("placeholder", arguments[i]);
-      } else {
-        inputTemporal.setAttribute("list", arguments[i]);
-      }
-    }
-    inputTemporal.classList.add("regular-style");
-    containerInput.append(inputTemporal);
-    return containerInput;
-  }
-
-  function createButton(variant, className, text) {
-    let buttonTemporal = document.createElement("button");
-    buttonTemporal.setAttribute("class", className);
-    buttonTemporal.setAttribute("variant", variant);
-    buttonTemporal.textContent = text;
-    return buttonTemporal;
-  }
 
   //
    function handleForm() {
