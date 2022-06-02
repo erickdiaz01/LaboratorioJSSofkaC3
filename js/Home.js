@@ -1,6 +1,7 @@
-export const Home = () => {
-  
+import { Juego } from "./classes/Juego.js";
+import { Usuario } from "./classes/Usuario.js";
 
+export const Home = () => {
   //Funcion que crea los elementos HTML
 
   function createElementWithText(etiqueta, texto, classNamed) {
@@ -37,18 +38,66 @@ export const Home = () => {
 
   function createButton(variant, className, text) {
     let buttonTemporal = document.createElement("button");
-    buttonTemporal.setAttribute("class",className);
+    buttonTemporal.setAttribute("class", className);
     buttonTemporal.setAttribute("variant", variant);
     buttonTemporal.textContent = text;
     return buttonTemporal;
   }
 
+  //
+   function handleForm() {
+    console.log("first");
+    const user = document.querySelector("#user");
+    const category = document.querySelector("#category");
 
-//Generacion del DOM mediante JS
+    if (user.value === "") {
+      user.setAttribute("class", "input-error");
+      alert("Ingrese un nombre de usuario");
+      return false;
+    } else {
+      user.setAttribute("class", "regular-style");
+    }
+    if (category.value === "") {
+      category.setAttribute("class", "input-error");
+      alert("Ingrese una categoria valida");
+      return false;
+    } else {
+      category.setAttribute("class", "regular-style");
+    }
+    return true;
+  }
 
-const container = document.querySelector("#container");
+  function createItemGame(category, user) {
+    const newUser = new Usuario(user);
+    const newGame = new Juego(category, newUser);
+    return newGame;
+  }
 
-const divMajor= createElementWithText("div","","containerHome")
+  function handleIniciarJuego() {
+    console.log("first");
+    const checkForm = handleForm();
+    if (checkForm) {
+      let arrayCategories = JSON.parse(localStorage.getItem("categories"));
+      let arrayGames = JSON.parse(localStorage.getItem("games"));
+      const user = document.querySelector("#user");
+      const category = document.querySelector("#category");
+      if (arrayCategories === null) {
+        arrayCategories = [];
+        return alert(
+          "No hay categorias de juegos disponibles, por favor cree un nuevo concurso para continuar"
+        );
+      }
+      const newGame = createItemGame(category.value, user.value);
+      arrayGames.push(newGame);
+      localStorage.setItem("games", JSON.stringify(arrayGames));
+    }
+  }
+
+  //Generacion del DOM mediante JS
+
+  const container = document.querySelector("#container");
+
+  const divMajor = createElementWithText("div", "", "containerHome");
 
   const titleWelcome = createElementWithText(
     "h1",
@@ -71,7 +120,8 @@ const divMajor= createElementWithText("div","","containerHome")
   );
   section1.append(label1, inputName);
 
-  const section2 = createElementWithText("section", "", "justify-center m-4");
+  const section2 = createElementWithText("form", "", "justify-center m-4");
+  section2.setAttribute("id", "formularioIniciarJuego");
   const label2 = createElementWithText("label", "Categoria de las preguntas");
   label2.setAttribute("for", "category");
   const divSelect = createElementWithText("div", "", "input-container");
@@ -91,9 +141,20 @@ const divMajor= createElementWithText("div","","containerHome")
     "flex justify-center intems center mt-4 p-4 text-2x1"
   );
   const buttonPlay = createButton("dark", "btn btn-dark", "A Jugar!");
-  buttonPlay.setAttribute("id","buttonPlay")
+  buttonPlay.setAttribute("id", "buttonPlay");
+  buttonPlay.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleIniciarJuego();
+  });
   section3.append(buttonPlay);
+  section2.append(section3);
 
-  divMajor.append(titleWelcome,titleInputTheInfo,section1,section2,section3)
+  divMajor.append(
+    titleWelcome,
+    titleInputTheInfo,
+    section1,
+    section2
+    
+  );
   container.append(divMajor);
 };
