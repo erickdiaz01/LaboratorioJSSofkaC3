@@ -126,7 +126,7 @@ export const NuevoConcurso = () => {
           console.log("terminado");
       }
       //CAMBIAR LOS LIMITES A 4
-      if (indicePregunta < 1) {
+      if (indicePregunta < 4) {
         indicePregunta += 1;
         question = "";
         respInc1 = "";
@@ -137,7 +137,7 @@ export const NuevoConcurso = () => {
         renderizacionPreguntas(indiceNivel, indicePregunta);
       } else {
         //CAMBIAR LOS LIMITES A 4
-        if (indiceNivel < 1) {
+        if (indiceNivel < 4) {
           indicePregunta = 0;
           indiceNivel += 1;
           renderizacionPreguntas(indiceNivel, indicePregunta);
@@ -273,7 +273,7 @@ export const NuevoConcurso = () => {
       const div4 = createElementWithText("div", "", "");
       const buttonSiguiente = createButton(
         "success",
-        "bg-success flex justify-center items-center",
+        "btn btn-success flex justify-center items-center",
         "Siguiente"
       );
       buttonSiguiente.addEventListener("click", (e) => {

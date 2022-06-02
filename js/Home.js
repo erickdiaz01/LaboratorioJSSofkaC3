@@ -7,7 +7,7 @@ import { createInput } from "./common/createInput.js";
 import { createButton } from "./common/createButton.js";
 export const Home = () => {
  
-
+const arrayCategories = JSON.parse(localStorage.getItem("categories"))
 
 
   //
@@ -54,6 +54,9 @@ export const Home = () => {
         );
       }
       const newGame = createItemGame(category.value, user.value);
+      if(arrayGames===null){
+        arrayGames=[]
+      }
       arrayGames.push(newGame);
       localStorage.setItem("games", JSON.stringify(arrayGames));
     }
@@ -97,6 +100,14 @@ export const Home = () => {
   selectCategory.setAttribute("id", "category");
   selectCategory.setAttribute("name", "category");
   //Aqui se tiene que generar las opciones mediante un fetch o un consumo de localStorage para el select, junto con su "value"
+
+  selectCategory.append(createElementWithText("option","",""));
+
+arrayCategories.forEach(category => {
+  let element =createElementWithText("option",category,"");
+  element.setAttribute("value",category)
+  selectCategory.append(element);
+});
 
   divSelect.append(selectCategory);
   section2.append(label2, divSelect);
