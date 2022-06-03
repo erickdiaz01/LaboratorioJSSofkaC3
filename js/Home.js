@@ -13,7 +13,7 @@ import { JuegoNuevo } from "./JuegoNuevo.js";
  * @function
  */
 export const Home = () => {
-  const arrayCategories = JSON.parse(localStorage.getItem("categories"));
+  let arrayCategories = JSON.parse(localStorage.getItem("categories"));
 if(arrayCategories===null){
   arrayCategories=[]
 }

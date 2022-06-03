@@ -7,7 +7,7 @@ import { createElementWithText } from "./common/createElementWithText.js";
  * @function
  */
 export const Historico = () => {
-  const gamesHistoric = JSON.parse(localStorage.getItem("games"));
+  let gamesHistoric = JSON.parse(localStorage.getItem("games"));
   if(gamesHistoric===null){
     gamesHistoric=[]
   }
