@@ -14,7 +14,9 @@ import { JuegoNuevo } from "./JuegoNuevo.js";
  */
 export const Home = () => {
   const arrayCategories = JSON.parse(localStorage.getItem("categories"));
-
+if(arrayCategories===null){
+  arrayCategories=[]
+}
   /**
    * Verifica si el usuario al darle click al boton de iniciar juego llenó los espacios de nombre de jugador y categoria del concurso, si no genera un cambio de estilos en el input o select
    * @returns {boolean}

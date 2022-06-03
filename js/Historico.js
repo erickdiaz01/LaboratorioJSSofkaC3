@@ -8,6 +8,9 @@ import { createElementWithText } from "./common/createElementWithText.js";
  */
 export const Historico = () => {
   const gamesHistoric = JSON.parse(localStorage.getItem("games"));
+  if(gamesHistoric===null){
+    gamesHistoric=[]
+  }
 /**
  * Funcion que genera todo el DOM necesario para visualizar una tabla con el historico de juegos
  * @function
