@@ -52,8 +52,7 @@ export const NuevoConcurso = () => {
       if (contestByCategory) {
         return alert("Ya existe un concurso con dicha categoria");
       }
-      // arrayCategories.push(categoryHandle.value);
-      // localStorage.setItem("categories", JSON.stringify(arrayCategories));
+ 
       category = categoryHandle.value;
       console.log(category);
       inicio = false;
@@ -195,6 +194,8 @@ export const NuevoConcurso = () => {
     }
     arrayContest.push(newContest);
     localStorage.setItem("contest", JSON.stringify(arrayContest));
+    arrayCategories.push(category);
+    localStorage.setItem("categories", JSON.stringify(arrayCategories));
   }
 
   //Generacion del DOM mediante JS
