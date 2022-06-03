@@ -1,3 +1,13 @@
+
+/**
+ * Crea facilmente y con rapidez un input estilizado ya dentro de un contenedor responsivo, con atributos necesarios para que se maneje adecuadamente el valor ingresado, retorna un nodo de input HTML
+ * @param {String} id 
+ * @param {String} name 
+ * @param {String} type 
+ * @param {String} placeholder 
+ * @param {String} list 
+ * @returns 
+ */
 export function createInput(id, name, type, placeholder, list) {
     let containerInput = document.createElement("div");
     containerInput.setAttribute("class", "input-container");

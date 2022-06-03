@@ -1,9 +1,15 @@
-//Funcion que crea los elementos HTML
+/**Importacion de las funciones que crean los elementos HTML*/
 import { createElementWithText } from "./common/createElementWithText.js";
 import { createInput } from "./common/createInput.js";
 import { createButton } from "./common/createButton.js";
+/**Importacion de la clase concurso */
 import { Concurso } from "./classes/Concurso.js";
-
+/**Importacion del NavBar */
+import { NavBar } from "./NavBar.js";
+/**
+ * Funcion global para la renderizacion de la pagina para crear un nuevo concurso
+ * @function
+ */
 export const NuevoConcurso = () => {
   //variables globales
   let indiceNivel = 0;
@@ -24,6 +30,10 @@ export const NuevoConcurso = () => {
 
   //Funciones para manejar el DOM
 
+  /**
+   * Manejador del valor de categoria, si ya existe una categoria igual a la ingresada lo alerta y no renderiza el formulario para ingresar las preguntas
+   * @returns {alert}
+   */
   function handleCategory() {
     try {
       let arrayCategories = JSON.parse(localStorage.getItem("categories"));
@@ -37,13 +47,13 @@ export const NuevoConcurso = () => {
         return alert("Ingrese una categoria");
       }
       let contestByCategory = arrayCategories.find(
-        (contest) => contest.category === categoryHandle.value
+        (contest) => contest === categoryHandle.value
       );
       if (contestByCategory) {
         return alert("Ya existe un concurso con dicha categoria");
       }
-      arrayCategories.push(categoryHandle.value);
-      localStorage.setItem("categories", JSON.stringify(arrayCategories));
+      // arrayCategories.push(categoryHandle.value);
+      // localStorage.setItem("categories", JSON.stringify(arrayCategories));
       category = categoryHandle.value;
       console.log(category);
       inicio = false;
@@ -52,6 +62,10 @@ export const NuevoConcurso = () => {
       console.log(error);
     }
   }
+  /**
+   * Manejador del formulario para ingresar la pregunta y las respuestas posibles, se acciona mediante el boton "Siguiente" y dependiendo lo que retorne se renderiza o no el siguiente formulario
+   * @returns {boolean}
+   */
   function handleFormQuestionary() {
     let inputs = [
       document.querySelector("#question"),
@@ -78,6 +92,10 @@ export const NuevoConcurso = () => {
     respCorr = inputs[4].value;
     return true;
   }
+  /**
+   * Manejador de los valores a guardar de las preguntas y respuestas una vez validadas, empuja los valores ingresados para que se puedan guardar después
+   * @returns {alert}
+   */
   function handleSiguiente() {
     const checkFormQuestion = handleFormQuestionary();
     if (checkFormQuestion) {
@@ -154,30 +172,41 @@ export const NuevoConcurso = () => {
       console.log(nivel5);
       console.log(indicePregunta);
       console.log(indiceNivel);
-
-      //Falta resetear los valores, cambiar el tipo del div a form
     } else {
       return alert("Ingrese la información");
     }
   }
-
-  function handleSaveContest(){
+/**
+ * Manejador que permite guardar en el localStorage los datos previamente ingresados
+ * @function
+ */
+  function handleSaveContest() {
     let arrayContest = JSON.parse(localStorage.getItem("contest"));
-    const newContest = new Concurso(category,nivel1,nivel2,nivel3,nivel4,nivel5) 
-    if(arrayContest===null){
-      arrayContest=[]
+    const newContest = new Concurso(
+      category,
+      nivel1,
+      nivel2,
+      nivel3,
+      nivel4,
+      nivel5
+    );
+    if (arrayContest === null) {
+      arrayContest = [];
     }
     arrayContest.push(newContest);
     localStorage.setItem("contest", JSON.stringify(arrayContest));
-
   }
 
   //Generacion del DOM mediante JS
-
+/**
+ * Funcion que renderiza el formularo en donde se van a ingresar los valores para las preguntas y respuestas de cada nivel, sus parametros son el indice de la pregunta y del nivel en donde se encuentra
+ * @param {number} indiceNivel 
+ * @param {number} indicePregunta 
+ */
   function renderizacionPreguntas(indiceNivel, indicePregunta) {
     const container = document.querySelector("#container");
     container.innerHTML = "";
-
+    NavBar();
     const sectionMajor = createElementWithText(
       "section",
       "",
@@ -192,7 +221,7 @@ export const NuevoConcurso = () => {
     const titleNivel = createElementWithText(
       "h3",
       "Nivel " +
-        //to do Falta poner el indice de nivel bajo la logica de renderizacion condicional
+        
         indiceNivel,
       "flex justify-center items-center text-2xl"
     );
@@ -293,7 +322,11 @@ export const NuevoConcurso = () => {
       container.append(sectionMajor);
     }
   }
-
+/**
+ * Funcion que renderiza la parte inicial de la creacion del concurso en la que se ingresa la nueva categoria del concurso a crear
+ * @function
+ * 
+ */
   function renderInicio() {
     const container = document.querySelector("#container");
 
@@ -340,11 +373,14 @@ export const NuevoConcurso = () => {
     divMajor.append(sectionCategoryInput);
     container.append(divMajor);
   }
-
+/**
+ * Renderiza la parte final de la creacion del concurso, alli se dispone de un boton que al ser presionado se guardan todos los datos ingresados
+ * @function
+ */
   function renderFinalPartCategory() {
     const container = document.querySelector("#container");
     container.innerHTML = "";
-
+    NavBar();
     const divMajor = createElementWithText("div", "", "");
 
     const titleCategoryContest = createElementWithText(
@@ -359,48 +395,14 @@ export const NuevoConcurso = () => {
       "btn btn-dark",
       "Guardar Concurso"
     );
-    buttonSaveContest.addEventListener("click",(e)=>{
-e.preventDefault();
-handleSaveContest();
-
-    })
+    buttonSaveContest.addEventListener("click", (e) => {
+      e.preventDefault();
+      handleSaveContest();
+    });
     div1.append(buttonSaveContest);
     divMajor.append(titleCategoryContest, parraf, div1);
     container.append(divMajor);
   }
 
-  // if (inicio) {
   renderInicio();
-  // }
-  // if (!inicio && siguiente) {
-  //   renderizacionPreguntas();
-  // }
-  // if (!siguiente) {
-  //   renderFinalPartCategory();
-  // }
-
-  // while(inicio){
-  //   renderInicio();
-  // }
-
-  // while((!inicio)&&siguiente){
-  //   renderizacionPreguntas();
-  // }
-  // while (!siguiente) {
-  //   renderFinalPartCategory();
-  // }
-  // do{
-  //   let inicioReq = await renderInicio();
-  //   if(inicioReq){
-  //     break;
-  //   }
-  // }while(inicio)
-
-  // do{
-  //   renderizacionPreguntas();
-  // }while((!inicio)&&siguiente)
-
-  // do{
-  //   renderFinalPartCategory();
-  // }while(!siguiente)
 };

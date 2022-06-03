@@ -1,7 +1,16 @@
+/**Importacion de las funciones para generar los nodos del DOM */
 import { createButton } from "./common/createButton.js";
 import { createElementWithText } from "./common/createElementWithText.js";
-
+/**Importacion de las clases necesarias para crear un nuevo juego y actualizar los registros */
 import { Juego } from "./classes/Juego.js";
+import { Usuario } from "./classes/Usuario.js";
+/**Importacion de la funcion de renderizacion del NavBar transversal a todas las paginas */
+import { NavBar } from "./NavBar.js";
+
+/**
+ * Funcion que engloba las funciones necesarias para manejar la renderizacion del DOM para un juego nuevo
+ * @function 
+ */
 export const JuegoNuevo = () => {
   let juegos = JSON.parse(localStorage.getItem("games"));
   let game = juegos[juegos.length - 1];
@@ -15,67 +24,79 @@ export const JuegoNuevo = () => {
   let gameGanado = false;
   let level = 1;
 
-  let rand = 0;
-
-  function randNum(rand) {
-    rand = Math.floor(Math.random() * 4);
+  
+/**
+ * Funcion que genera un numero aleatorio del 0 al 4 para seleccionar la pregunta a mostrar en cada nivel
+ * @returns {number}
+ */
+  function randNum() {
+    let rand = Math.floor(Math.random() * 4);
     return rand;
   }
+  /**
+   * Majeador de respuestas incorrectas, cuando se selecciona alguna respuesta incorrecta iguala el puntaje a cero y muestra un cuadro donde se le indica al usuario que no era la respuesta correcta
+   * @function
+   */
   function handleIncorrect() {
     alert("Respuesta incorrecta, has perdido");
     let gameUpdate = juegos.pop();
     gameFin = true;
     points = 0;
-    let newGame = new Juego(
-      gameUpdate.concurso,
-      gameUpdate.jugador.name,
-      points
-    );
+    let newUser = new Usuario(gameUpdate.jugador.name);
+    let newGame = new Juego(gameUpdate.concurso, newUser, points);
     juegos.push(newGame);
     localStorage.setItem("games", JSON.stringify(juegos));
     renderizarJuego();
   }
-
+/**
+ * Manejador de la respuesta correcta, cuando es seleccionada la respuesta correcta este cambia de estado el nivel y el puntaje, así mismo renderiza nuevamente el juego pero ahora con el estado actual
+ * @function
+ */
   function handleCorrect() {
     if (level < 5) {
       level += 1;
       points += 100;
       renderizarJuego();
     } else {
-      points+=100
+      points += 100;
       alert("Felicidades, has ganado el concurso!");
       gameGanado = true;
       let gameUpdate = juegos.pop();
-      let newGame = new Juego(
-        gameUpdate.concurso,
-        gameUpdate.jugador.name,
-        points
-      );
+      let newUser = new Usuario(gameUpdate.jugador.name);
+      let newGame = new Juego(gameUpdate.concurso, newUser, points);
       juegos.push(newGame);
       localStorage.setItem("games", JSON.stringify(juegos));
       renderizarJuego();
     }
   }
-
+/**
+ * Manejador para el boton de retirar, cuando es oprimido guarda el puntaje actual del participante y queda registrado el juego con dicho puntaje
+ * @function
+ */
   function handleRetirar() {
     alert("Gracias por participar");
     let gameUpdate = juegos.pop();
+    let newUser = new Usuario(gameUpdate.jugador.name);
     let newGame = new Juego(
       gameUpdate.concurso,
-      gameUpdate.jugador.name,
+      newUser,
       points
     );
     juegos.push(newGame);
     localStorage.setItem("games", JSON.stringify(juegos));
-    gameFin=true;
+    gameFin = true;
     renderizarJuego();
   }
 
-  //Generacion del DOM
+  /**
+   * Funcion que crea y renderiza el DOM necesario para mostrar el juego en curso
+   * @function
+   */
   function renderizarJuego() {
     if (contestReady) {
       const container = document.querySelector("#container");
       container.innerHTML = "";
+      NavBar();
       const div1 = createElementWithText(
         "div",
         "",
@@ -93,7 +114,7 @@ export const JuegoNuevo = () => {
       );
       div1.append(titlePoints, titleLevel);
       container.append(div1);
-      if (!gameFin&&!gameGanado) {
+      if (!gameFin && !gameGanado) {
         switch (level) {
           case 1:
             let numRand1 = randNum();
@@ -148,6 +169,7 @@ export const JuegoNuevo = () => {
             break;
           case 2:
             let numRand2 = randNum();
+            console.log(numRand2);
             const divMajor2 = createElementWithText(
               "div",
               "",
@@ -199,6 +221,7 @@ export const JuegoNuevo = () => {
 
           case 3:
             let numRand3 = randNum();
+            console.log(numRand3);
             const divMajor3 = createElementWithText(
               "div",
               "",
@@ -396,7 +419,6 @@ export const JuegoNuevo = () => {
           "h1",
           "CATEGORIA: " + game.concurso + "\n" + "PUNTAJE: " + points,
           ""
-         
         );
 
         divGameFin.append(titleGameFin, titleCatPointFin);
@@ -404,16 +426,20 @@ export const JuegoNuevo = () => {
         container.append(divGameFinMajor);
       }
 
-      const divRetirar = createElementWithText("div", "", "flex justify-center intems center mt-4 p-4 text-2x1");
+      const divRetirar = createElementWithText(
+        "div",
+        "",
+        "flex justify-center intems center mt-4 p-4 text-2x1"
+      );
       const buttonRetirar = createButton(
         "danger",
         "btn btn-danger",
         "RETIRARSE"
       );
-      buttonRetirar.addEventListener("click",e=>{
+      buttonRetirar.addEventListener("click", (e) => {
         e.preventDefault();
         handleRetirar();
-      })
+      });
       divRetirar.append(buttonRetirar);
       container.append(divRetirar);
     }

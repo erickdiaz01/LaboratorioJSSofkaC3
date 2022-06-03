@@ -1,7 +1,8 @@
+/**
+ * Importacion de las funciones necesarias para renderizar toda la pagina desde su momento inicial
+ */
 import { Home } from "./Home.js";
-import { JuegoNuevo } from "./JuegoNuevo.js";
-import { NuevoConcurso } from "./NuevoConcurso.js";
-
+import { NavBar } from "./NavBar.js";
+/**Inicializacion de las funciones */
+NavBar();
 Home();
-// JuegoNuevo();
-// NuevoConcurso();

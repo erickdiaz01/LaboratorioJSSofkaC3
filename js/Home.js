@@ -1,17 +1,25 @@
-//Clases de objetos a guardar
+/** Importacion de  Clases de objetos a guardar*/
 import { Juego } from "./classes/Juego.js";
 import { Usuario } from "./classes/Usuario.js";
- //Funcion que crea los elementos HTML
+
+/**Importacion de funcionones que crean los elementos HTML*/
 import { createElementWithText } from "./common/createElementWithText.js";
 import { createInput } from "./common/createInput.js";
 import { createButton } from "./common/createButton.js";
+import { JuegoNuevo } from "./JuegoNuevo.js";
+
+/**
+ * Arrow function que engloba las funciones utilizadas para manejar los eventos del formulario para iniciar un juego nuevo, y tambien la renderización condicional del juego con la categoria deseada
+ * @function
+ */
 export const Home = () => {
- 
-const arrayCategories = JSON.parse(localStorage.getItem("categories"))
+  const arrayCategories = JSON.parse(localStorage.getItem("categories"));
 
-
-  //
-   function handleForm() {
+  /**
+   * Verifica si el usuario al darle click al boton de iniciar juego llenó los espacios de nombre de jugador y categoria del concurso, si no genera un cambio de estilos en el input o select
+   * @returns {boolean}
+   */
+  function handleForm() {
     console.log("first");
     const user = document.querySelector("#user");
     const category = document.querySelector("#category");
@@ -32,15 +40,22 @@ const arrayCategories = JSON.parse(localStorage.getItem("categories"))
     }
     return true;
   }
-
+  /**
+   * Crea un objeto de la clase Usuario, y un objeto de la clase Juego con base a los argumentos ingresados por el usuario
+   * @param {String} category
+   * @param {String} user
+   * @returns {Object}
+   */
   function createItemGame(category, user) {
     const newUser = new Usuario(user);
     const newGame = new Juego(category, newUser);
     return newGame;
   }
-
+  /**
+   *Maneja la renderizacion condicional de la pagina de nuevo juego segun los datos ingresados por el usuario, retorna una alerta cuando no se ha llenado correctamente la informacion
+   * @returns
+   */
   function handleIniciarJuego() {
-    console.log("first");
     const checkForm = handleForm();
     if (checkForm) {
       let arrayCategories = JSON.parse(localStorage.getItem("categories"));
@@ -54,15 +69,16 @@ const arrayCategories = JSON.parse(localStorage.getItem("categories"))
         );
       }
       const newGame = createItemGame(category.value, user.value);
-      if(arrayGames===null){
-        arrayGames=[]
+      if (arrayGames === null) {
+        arrayGames = [];
       }
       arrayGames.push(newGame);
       localStorage.setItem("games", JSON.stringify(arrayGames));
+      JuegoNuevo();
     }
   }
 
-  //Generacion del DOM mediante JS
+  /**Generacion del DOM mediante JS*/
 
   const container = document.querySelector("#container");
 
@@ -101,13 +117,13 @@ const arrayCategories = JSON.parse(localStorage.getItem("categories"))
   selectCategory.setAttribute("name", "category");
   //Aqui se tiene que generar las opciones mediante un fetch o un consumo de localStorage para el select, junto con su "value"
 
-  selectCategory.append(createElementWithText("option","",""));
+  selectCategory.append(createElementWithText("option", "", ""));
 
-arrayCategories.forEach(category => {
-  let element =createElementWithText("option",category,"");
-  element.setAttribute("value",category)
-  selectCategory.append(element);
-});
+  arrayCategories.forEach((category) => {
+    let element = createElementWithText("option", category, "");
+    element.setAttribute("value", category);
+    selectCategory.append(element);
+  });
 
   divSelect.append(selectCategory);
   section2.append(label2, divSelect);
@@ -119,19 +135,13 @@ arrayCategories.forEach(category => {
   );
   const buttonPlay = createButton("dark", "btn btn-dark", "A Jugar!");
   buttonPlay.setAttribute("id", "buttonPlay");
-  buttonPlay.addEventListener('click', (e) => {
+  buttonPlay.addEventListener("click", (e) => {
     e.preventDefault();
     handleIniciarJuego();
   });
   section3.append(buttonPlay);
   section2.append(section3);
 
-  divMajor.append(
-    titleWelcome,
-    titleInputTheInfo,
-    section1,
-    section2
-    
-  );
+  divMajor.append(titleWelcome, titleInputTheInfo, section1, section2);
   container.append(divMajor);
 };
