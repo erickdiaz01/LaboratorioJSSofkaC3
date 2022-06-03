@@ -119,7 +119,7 @@ export const Home = () => {
 
   selectCategory.append(createElementWithText("option", "", ""));
 
-  arrayCategories.forEach((category) => {
+  arrayCategories?.forEach((category) => {
     let element = createElementWithText("option", category, "");
     element.setAttribute("value", category);
     selectCategory.append(element);

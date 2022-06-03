@@ -34,7 +34,7 @@ export const Historico = () => {
     dataTable.append(tableHeader);
 
     const tableBody = document.createElement("tbody");
-    gamesHistoric.forEach((game) => {
+    gamesHistoric?.forEach((game) => {
       let tregister = createElementWithText("tr", "", "");
       let thNameRegister = createElementWithText("th", game.jugador.name, "");
       let tdCategory = createElementWithText("td", game.concurso, "");
